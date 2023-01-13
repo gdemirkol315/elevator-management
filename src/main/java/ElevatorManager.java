@@ -20,7 +20,9 @@ public class ElevatorManager {
     public ElevatorManager() {
 
         for (int i = 0; i < numberOfElevators; i++) {
-            elevators.add(new Elevator(i + ""));
+            Elevator elevator = new Elevator(i + "");
+            elevator.start();
+            elevators.add(elevator);
         }
 
         logger.info("Elevator manager initialized.");
