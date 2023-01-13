@@ -1,4 +1,4 @@
-import Model.Request;
+import model.Request;
 
 public class ElevatorManagementSystem {
 

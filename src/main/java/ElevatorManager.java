@@ -1,11 +1,9 @@
-import Model.Elevator;
-import Model.Request;
+import model.Elevator;
+import model.Request;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 
 
