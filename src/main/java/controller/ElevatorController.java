@@ -1,4 +1,7 @@
+package controller;
+
 import model.Elevator;
+import model.ElevatorState;
 import model.Request;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,21 +10,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class ElevatorManager {
+public class ElevatorController {
 
-    private final Logger logger = LogManager.getLogger(ElevatorManager.class);
-    private final int numberOfElevators = 7;
-    private final int numberOfFloors = 55;
+    private final Logger logger = LogManager.getLogger(ElevatorController.class);
+    private static final int NUMBER_OF_ELEVATORS = 7;
+    private static final int NUMBER_OF_FLOORS = 55;
 
     private Set<Elevator> elevators = new HashSet<>();
     //private Queue<Request> requests = new LinkedList<>();
 
 
-    public ElevatorManager() {
+    public ElevatorController() {
 
-        for (int i = 0; i < numberOfElevators; i++) {
+        for (int i = 0; i < NUMBER_OF_ELEVATORS; i++) {
             Elevator elevator = new Elevator(i + "");
-            elevator.start();
             elevators.add(elevator);
         }
 
@@ -32,10 +34,8 @@ public class ElevatorManager {
     public void addRequest(Request request) {
 
         Elevator elevator = findNearestElevator(request.getCurrentFloor());
-        if (elevator.getCurrentFloor() != request.getCurrentFloor()) {
-            elevator.move(request.getCurrentFloor());
-        }
         elevator.move(request.getDestinationFloor());
+
 
     }
 
@@ -48,19 +48,20 @@ public class ElevatorManager {
 
         for (Elevator elevator : elevators) {
 
-            if (elevator.getCurrentFloor() == floorNumber) {
+            if (elevator.getCurrentFloor() == floorNumber
+                    && elevator.getElevatorState().equals(ElevatorState.IDLE)) {
                 return elevator;
             }
 
-            int levelDiff = Math.abs(elevator.getCurrentFloor() - destination); //30
+            int levelDiff = Math.abs(elevator.getCurrentFloor() - destination);
 
             if (shortestPath == 0) {
                 shortestPath = levelDiff;
             }
 
             if (levelDiff < shortestPath) {
-                shortestPath = levelDiff; //15
-                nearestElevator = elevator; //2
+                shortestPath = levelDiff;
+                nearestElevator = elevator;
             }
         }
 
