@@ -13,7 +13,7 @@ public class Request {
     }
 
     private void setDirection(){
-        if (currentFloor > destinationFloor){
+        if (destinationFloor > currentFloor){
             direction = Direction.UP;
         } else {
             direction = Direction.DOWN;
