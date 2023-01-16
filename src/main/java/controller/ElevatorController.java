@@ -41,7 +41,7 @@ public class ElevatorController {
         }
         elevator.getQueue().add(request);
         elevator.setElevatorState(ElevatorState.IN_MOTION);
-        elevator.move(request);
+        elevator.move();
 
 
     }

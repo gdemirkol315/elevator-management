@@ -30,7 +30,7 @@ public class Elevator {
         this.elevatorId = elevatorId;
     }
 
-    public void move(Request request) {
+    public void move() {
 
         try {
             if (elevatorRunner.getState() == Thread.State.NEW) {
