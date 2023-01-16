@@ -18,7 +18,10 @@ public class Elevator {
     private int currentFloor = 0;
     private ElevatorState elevatorState = IDLE;
     private Direction currentDirection;
+    private ElevatorRunner elevatorRunner = new ElevatorRunner(this);
+    private final Logger logger = LogManager.getLogger(Elevator.class);
 
+    private Queue<Request> queue = new LinkedList<>();
 
     public Elevator() {
     }
@@ -27,12 +30,23 @@ public class Elevator {
         this.elevatorId = elevatorId;
     }
 
-    public void move(int destinationFloor) {
+    public void move(Request request) {
 
-        ElevatorRunner elevatorRunner = new ElevatorRunner(this, destinationFloor);
-        elevatorState = IN_MOTION;
-        elevatorRunner.start();
+        try {
+            if (elevatorRunner.getState() == Thread.State.NEW) {
+                elevatorRunner.start();
+            } else if (elevatorRunner.getState() == Thread.State.RUNNABLE) {
+                synchronized (elevatorRunner) {
+                    elevatorRunner.wait();
+                }
 
+            } else if (elevatorRunner.getState() == Thread.State.TERMINATED){
+                elevatorRunner = new ElevatorRunner(this);
+                elevatorRunner.start();
+            }
+        } catch (Exception e) {
+            logger.error("Unexpected thread state {}", elevatorRunner.getState(), e);
+        }
     }
 
 
@@ -68,4 +82,7 @@ public class Elevator {
         this.currentDirection = currentDirection;
     }
 
+    public Queue<Request> getQueue() {
+        return queue;
+    }
 }
